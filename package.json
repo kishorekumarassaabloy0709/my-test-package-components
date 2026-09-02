@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "@kishorekumarselvarajan/my-test-package-components",
   "version": "0.1.0",
   "description": "A collection of reusable Jira UI components",
@@ -7,7 +8,7 @@
   "author": "Kishore Kumar Selvarajan",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kishorekumarassaabloy0709/my-test-package-components.git"
+    "url": "git+https://github.com/kishorekumarassaabloy0709/my-test-package-components.git"
   },
   "homepage": "https://github.com/kishorekumarassaabloy0709/my-test-package-components/blob/main/app/page.tsx",
   "bugs": {
@@ -37,7 +38,7 @@
   ],
   "publishConfig": {
     "access": "public"
-    },
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -65,7 +66,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "rollup": "^4",
-    "rollup-plugin-peer-deps-external": "^9",
+    "rollup-plugin-peer-deps-external": "^2",
     "rollup-plugin-postcss": "^4",
     "tailwindcss": "^4",
     "tslib": "^2",
