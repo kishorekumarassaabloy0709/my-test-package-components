@@ -7,11 +7,11 @@
   "author": "Kishore Kumar Selvarajan",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/my-ui-components.git"
+    "url": "https://github.com/kishorekumarassaabloy0709/my-test-package-components.git"
   },
-  "homepage": "https://github.com/yourusername/my-ui-components#readme",
+  "homepage": "https://github.com/kishorekumarassaabloy0709/my-test-package-components/blob/main/app/page.tsx",
   "bugs": {
-    "url": "https://github.com/yourusername/my-ui-components/issues"
+    "url": "https://github.com/kishorekumarassaabloy0709/my-test-package-components/issues"
   },
   "keywords": [
     "react",
