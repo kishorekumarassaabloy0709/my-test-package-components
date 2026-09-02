@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@kishorekumarselvarajan/my-test-package-components",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A collection of reusable Jira UI components",
   "private": false,
   "license": "MIT",

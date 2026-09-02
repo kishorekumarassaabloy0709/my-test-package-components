@@ -7,8 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-02
+
+### Fixed
+- Fixed Button and Card components not rendering children correctly
+- Explicitly destructured and rendered children prop to prevent React errors
+- Resolved "Objects are not valid as a React child" error
+
+## [0.2.0] - 2026-09-02
+
 ### Added
-- Initial component library setup
+- Production-ready Button and Card components
+- Full TypeScript support with comprehensive type definitions
+- CSS Modules for scoped component styling
+- Support for React 18 & 19
+- Proper ref forwarding support via React.forwardRef
+- Multiple component variants and sizes
+
+### Improved
+- Enhanced component structure for better reusability
+- Better type safety with exported interfaces
+- Fixed TypeScript CSS Module type definitions
 
 ## [0.1.0] - 2024-01-01
 
