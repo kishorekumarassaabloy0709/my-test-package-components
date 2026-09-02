@@ -3,10 +3,74 @@ import React, { useState, useRef, useEffect } from 'react';
 import { UploadCloud, FileText, X } from 'lucide-react';
 import { Dialog } from 'primereact/dialog';
 
-var styles = {"button":"Button-module_button__sRq-Y","primary":"Button-module_primary__WOvcD","secondary":"Button-module_secondary__JoOEb","danger":"Button-module_danger__9Ophv","sm":"Button-module_sm__wautS","md":"Button-module_md__wa3uJ","lg":"Button-module_lg__ACCPs"};
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
 
-const Button = React.forwardRef(({ variant = 'primary', size = 'md', className, children, ...props }, ref) => {
-    return (jsx("button", { ref: ref, className: `${styles.button} ${styles[variant]} ${styles[size]} ${className || ''}`, ...props, children: children }));
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
+
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = ".Button-module_button__sRq-Y {\r\n  border: none;\r\n  border-radius: 6px;\r\n  font-weight: 500;\r\n  cursor: pointer;\r\n  transition: all 0.2s ease;\r\n  font-family: inherit;\r\n}\r\n\r\n.Button-module_button__sRq-Y:hover {\r\n  opacity: 0.9;\r\n}\r\n\r\n.Button-module_button__sRq-Y:active {\r\n  transform: scale(0.98);\r\n}\r\n\r\n.Button-module_button__sRq-Y:disabled {\r\n  cursor: not-allowed;\r\n  opacity: 0.5;\r\n}\r\n\r\n/* Variants */\r\n.Button-module_primary__WOvcD {\r\n  background-color: #3b82f6;\r\n  color: white;\r\n}\r\n\r\n.Button-module_primary__WOvcD:hover:not(:disabled) {\r\n  background-color: #2563eb;\r\n}\r\n\r\n.Button-module_secondary__JoOEb {\r\n  background-color: #e5e7eb;\r\n  color: #1f2937;\r\n}\r\n\r\n.Button-module_secondary__JoOEb:hover:not(:disabled) {\r\n  background-color: #d1d5db;\r\n}\r\n\r\n.Button-module_danger__9Ophv {\r\n  background-color: #ef4444;\r\n  color: white;\r\n}\r\n\r\n.Button-module_danger__9Ophv:hover:not(:disabled) {\r\n  background-color: #dc2626;\r\n}\r\n\r\n/* Sizes */\r\n.Button-module_sm__wautS {\r\n  padding: 6px 12px;\r\n  font-size: 14px;\r\n}\r\n\r\n.Button-module_md__wa3uJ {\r\n  padding: 10px 16px;\r\n  font-size: 16px;\r\n}\r\n\r\n.Button-module_lg__ACCPs {\r\n  padding: 12px 24px;\r\n  font-size: 18px;\r\n}\r\n";
+var styles = {"button":"Button-module_button__sRq-Y","primary":"Button-module_primary__WOvcD","secondary":"Button-module_secondary__JoOEb","danger":"Button-module_danger__9Ophv","sm":"Button-module_sm__wautS","md":"Button-module_md__wa3uJ","lg":"Button-module_lg__ACCPs"};
+styleInject(css_248z);
+
+const Button = React.forwardRef((_a, ref) => {
+    var { variant = 'primary', size = 'md', className, children } = _a, props = __rest(_a, ["variant", "size", "className", "children"]);
+    return (jsx("button", Object.assign({ ref: ref, className: `${styles.button} ${styles[variant]} ${styles[size]} ${className || ''}` }, props, { children: children })));
 });
 Button.displayName = 'Button';
 
@@ -57,14 +121,16 @@ function Card({ ticketsApiUrl = "/api/tickets", className }) {
         setFiles((prev) => [...prev, ...newFiles]);
     };
     const handleFileInputChange = (e) => {
-        if (e.target.files?.length)
+        var _a;
+        if ((_a = e.target.files) === null || _a === void 0 ? void 0 : _a.length)
             addFiles(e.target.files);
         e.target.value = "";
     };
     const handleDrop = (e) => {
+        var _a;
         e.preventDefault();
         setIsDragging(false);
-        if (e.dataTransfer.files?.length)
+        if ((_a = e.dataTransfer.files) === null || _a === void 0 ? void 0 : _a.length)
             addFiles(e.dataTransfer.files);
     };
     const removeFile = (name) => {
@@ -100,7 +166,7 @@ function Card({ ticketsApiUrl = "/api/tickets", className }) {
                 text: "Ticket submitted successfully.",
             });
         }
-        catch {
+        catch (_a) {
             setFormMessage({
                 type: "error",
                 text: "Something went wrong submitting the ticket. Please try again.",
@@ -111,7 +177,7 @@ function Card({ ticketsApiUrl = "/api/tickets", className }) {
             setTimeout(() => setFormMessage(null), 4000);
         }
     };
-    return (jsx("div", { className: `min-h-screen bg-[#cfe0f7] p-4 ${className ?? ""}`, children: jsx("div", { className: "w-full p-4", children: jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [jsxs("div", { className: "rounded border bg-white w-600", style: {
+    return (jsx("div", { className: `min-h-screen bg-[#cfe0f7] p-4 ${className !== null && className !== void 0 ? className : ""}`, children: jsx("div", { className: "w-full p-4", children: jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [jsxs("div", { className: "rounded border bg-white w-600", style: {
                             width: "700px",
                             textAlign: "left",
                             height: "550px",
@@ -128,7 +194,7 @@ function Card({ ticketsApiUrl = "/api/tickets", className }) {
                                                     setIsDragging(true);
                                                 }, onDragLeave: () => setIsDragging(false), onDrop: handleDrop, className: `flex flex-wrap items-center gap-3 rounded border px-3 py-2 ${isDragging
                                                     ? "border-blue-400 bg-blue-50"
-                                                    : "border-slate-300"}`, children: [jsxs("button", { type: "button", onClick: () => fileInputRef.current?.click(), className: "flex items-center gap-2 rounded px-3 py-1.5 text-blue-600 hover:bg-blue-50", children: [jsx(UploadCloud, { size: 14 }), "Upload Files"] }), jsx("span", { className: "text-slate-500", children: "Or drop files" }), jsx("input", { ref: fileInputRef, type: "file", multiple: true, onChange: handleFileInputChange, className: "hidden" })] }), jsx("p", { className: "mt-2 text-sm font-medium text-red-600", children: "Note: You can drop or select several files at once." }), files.length > 0 && (jsx("ul", { className: "mt-2 space-y-1", children: files.map((f) => (jsxs("li", { className: "flex items-center justify-between rounded bg-slate-50 px-3 py-1.5 text-sm text-slate-700", children: [jsxs("span", { className: "flex min-w-0 items-center gap-2", children: [jsx(FileText, { size: 14, className: "shrink-0 text-slate-400" }), jsx("span", { className: "truncate", children: f.name })] }), jsx("button", { type: "button", onClick: () => removeFile(f.name), className: "ml-2 shrink-0 text-slate-400 hover:text-red-500", "aria-label": `Remove ${f.name}`, children: jsx(X, { size: 14 }) })] }, f.name))) }))] }), formMessage && (jsx(Dialog, { style: { width: "28vw", textAlign: "center" }, header: jsx("div", { style: {
+                                                    : "border-slate-300"}`, children: [jsxs("button", { type: "button", onClick: () => { var _a; return (_a = fileInputRef.current) === null || _a === void 0 ? void 0 : _a.click(); }, className: "flex items-center gap-2 rounded px-3 py-1.5 text-blue-600 hover:bg-blue-50", children: [jsx(UploadCloud, { size: 14 }), "Upload Files"] }), jsx("span", { className: "text-slate-500", children: "Or drop files" }), jsx("input", { ref: fileInputRef, type: "file", multiple: true, onChange: handleFileInputChange, className: "hidden" })] }), jsx("p", { className: "mt-2 text-sm font-medium text-red-600", children: "Note: You can drop or select several files at once." }), files.length > 0 && (jsx("ul", { className: "mt-2 space-y-1", children: files.map((f) => (jsxs("li", { className: "flex items-center justify-between rounded bg-slate-50 px-3 py-1.5 text-sm text-slate-700", children: [jsxs("span", { className: "flex min-w-0 items-center gap-2", children: [jsx(FileText, { size: 14, className: "shrink-0 text-slate-400" }), jsx("span", { className: "truncate", children: f.name })] }), jsx("button", { type: "button", onClick: () => removeFile(f.name), className: "ml-2 shrink-0 text-slate-400 hover:text-red-500", "aria-label": `Remove ${f.name}`, children: jsx(X, { size: 14 }) })] }, f.name))) }))] }), formMessage && (jsx(Dialog, { style: { width: "28vw", textAlign: "center" }, header: jsx("div", { style: {
                                                 background: "rgb(243, 243, 243)",
                                                 fontWeight: "bold",
                                             }, children: formMessage.type === "success"

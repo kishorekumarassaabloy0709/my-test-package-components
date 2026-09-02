@@ -1,48 +1,10 @@
 {
 
-  "type": "module",
-
   "name": "@kishorekumarselvarajan/my-test-package-components",
 
-  "version": "0.2.3",
+  "version": "0.2.4",
 
-  "description": "A collection of reusable React UI components",
-
-  "private": false,
-
-  "license": "MIT",
-
-  "author": "Kishore Kumar Selvarajan",
-
-  "repository": {
-
-    "type": "git",
-
-    "url": "git+https://github.com/kishorekumarassaabloy0709/my-test-package-components.git"
-
-  },
-
-  "homepage": "https://github.com/kishorekumarassaabloy0709/my-test-package-components",
-
-  "bugs": {
-
-    "url": "https://github.com/kishorekumarassaabloy0709/my-test-package-components/issues"
-
-  },
-
-  "keywords": [
-
-    "react",
-
-    "components",
-
-    "ui",
-
-    "library",
-
-    "typescript"
-
-  ],
+  "type": "module",
 
   "main": "dist/index.js",
 
@@ -50,45 +12,15 @@
 
   "types": "dist/index.d.ts",
 
-  "exports": {
-
-    ".": {
-
-      "import": "./dist/index.esm.js",
-
-      "require": "./dist/index.js",
-
-      "types": "./dist/index.d.ts"
-
-    }
-
-  },
-
   "files": [
 
-    "dist",
-
-    "README.md"
+    "dist"
 
   ],
 
-  "publishConfig": {
-
-    "access": "public"
-
-  },
-
   "scripts": {
 
-    "dev": "next dev",
-
-    "build": "next build",
-
     "build:lib": "rollup -c",
-
-    "start": "next start",
-
-    "lint": "eslint",
 
     "prepublishonly": "npm run build:lib"
 
@@ -96,63 +28,41 @@
 
   "peerDependencies": {
 
-    "lucide-react": "^0.400.0",
+    "react": "^18.0.0 || ^19.0.0",
 
-    "primeicons": "^7.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
 
     "primereact": "^10.0.0",
 
-    "react": "^18.0.0 || ^19.0.0",
+    "primeicons": "^7.0.0",
 
-    "react-dom": "^18.0.0 || ^19.0.0"
-
-  },
-
-  "dependencies": {
-
-    "next": "16.3.4"
+    "lucide-react": "^0.400.0"
 
   },
 
   "devDependencies": {
 
+    "react": "^18.3.1",
+
+    "react-dom": "^18.3.1",
+
+    "primereact": "^10.9.0",
+
+    "primeicons": "^7.0.0",
+
+    "lucide-react": "^0.400.0",
+
+    "typescript": "^5",
+
+    "rollup": "^4",
+
     "@rollup/plugin-node-resolve": "^15",
 
     "@rollup/plugin-typescript": "^11",
 
-    "@tailwindcss/postcss": "^4",
-
-    "@types/node": "^20",
-
-    "@types/react": "^19",
-
-    "@types/react-dom": "^19",
-
-    "eslint": "^9",
-
-    "eslint-config-next": "16.3.4",
-
-    "lucide-react": "^0.400.0",
-
-    "primeicons": "^7.0.0",
-
-    "primereact": "^10.9.0",
-
-    "rollup": "^4",
-
     "rollup-plugin-peer-deps-external": "^2",
 
-    "rollup-plugin-postcss": "^4",
-
-    "tailwindcss": "^4",
-
-    "tslib": "^2",
-
-    "typescript": "^5",
-
-    "react": "^19.0.0",
-
-    "react-dom": "^19.0.0"
+    "rollup-plugin-postcss": "^4"
 
   }
 
