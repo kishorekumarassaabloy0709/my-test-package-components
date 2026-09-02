@@ -35,5 +35,11 @@ export default {
       sourceMap: true,
     }),
   ],
-  external: ['react', 'react-dom'],
+  external: [
+    'react',
+    'react-dom',
+    'react/jsx-runtime',
+    'lucide-react',
+    'primereact/dialog',
+  ],
 };

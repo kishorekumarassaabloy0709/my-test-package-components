@@ -1,17 +1,164 @@
-import { jsx } from 'react/jsx-runtime';
-import React from 'react';
+import { jsx, jsxs } from 'react/jsx-runtime';
+import React, { useState, useRef, useEffect } from 'react';
+import { UploadCloud, FileText, X } from 'lucide-react';
+import { Dialog } from 'primereact/dialog';
 
-var styles$1 = {"button":"Button-module_button__sRq-Y","primary":"Button-module_primary__WOvcD","secondary":"Button-module_secondary__JoOEb","danger":"Button-module_danger__9Ophv","sm":"Button-module_sm__wautS","md":"Button-module_md__wa3uJ","lg":"Button-module_lg__ACCPs"};
+var styles = {"button":"Button-module_button__sRq-Y","primary":"Button-module_primary__WOvcD","secondary":"Button-module_secondary__JoOEb","danger":"Button-module_danger__9Ophv","sm":"Button-module_sm__wautS","md":"Button-module_md__wa3uJ","lg":"Button-module_lg__ACCPs"};
 
 const Button = React.forwardRef(({ variant = 'primary', size = 'md', className, children, ...props }, ref) => {
-    return (jsx("button", { ref: ref, className: `${styles$1.button} ${styles$1[variant]} ${styles$1[size]} ${className || ''}`, ...props, children: children }));
+    return (jsx("button", { ref: ref, className: `${styles.button} ${styles[variant]} ${styles[size]} ${className || ''}`, ...props, children: children }));
 });
 Button.displayName = 'Button';
 
-var styles = {"card":"Card-module_card__56mNv"};
-
-const Card = React.forwardRef(({ className, children, ...props }, ref) => (jsx("div", { ref: ref, className: `${styles.card} ${className || ''}`, ...props, children: children })));
-Card.displayName = 'Card';
+const OBJECT_TYPES = [
+    "Account",
+    "CAM",
+    "CAM Brand",
+    "Contact",
+    "Opportunity",
+    "Contract",
+    "AlertCircle",
+];
+function TicketCard({ ticket }) {
+    return (jsxs("div", { className: "border-b border-slate-200 py-4 last:border-0", style: { alignItems: "left", textAlign: "left", color: "black" }, children: [jsx("div", { className: "mb-2", children: jsxs("div", { className: "font-semibold text-blue-600 text-sky-800 hover:underline", style: { display: "flex", alignItems: "left", textAlign: "left" }, children: [jsx("i", { className: "pi pi-globe mr-2 bg-pink-300 text-white", style: {
+                                fontSize: "1.6rem",
+                                padding: ".5rem",
+                                borderRadius: "4px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                minWidth: "2.5rem",
+                                height: "2.5rem",
+                            } }), ticket.id] }) }), jsxs("div", { children: [jsx("span", { className: "font-medium text-slate-500", children: "Object Type: " }), jsx("span", { children: ticket.objectType }), jsx("br", {}), jsx("span", { className: "font-medium text-slate-500", children: "Subject: " }), jsx("span", { children: ticket.subject }), jsx("br", {}), jsx("span", { className: "font-medium text-slate-500", children: "Status: " }), jsx("span", { children: ticket.status }), jsx("br", {}), jsx("span", { className: "font-medium text-slate-500", children: "Last Modified By:" }), jsx("br", {}), jsxs("span", { children: [ticket.modifiedBy, ", ", ticket.modifiedOn] })] })] }));
+}
+function Card({ ticketsApiUrl = "/api/tickets", className }) {
+    const [objectType, setObjectType] = useState("");
+    const [subject, setSubject] = useState("");
+    const [description, setDescription] = useState("");
+    const [tickets, setTickets] = useState([]);
+    const [ticketsLoading, setTicketsLoading] = useState(true);
+    const [files, setFiles] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    const fileInputRef = useRef(null);
+    const [formMessage, setFormMessage] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    useEffect(() => {
+        fetch(ticketsApiUrl)
+            .then((res) => res.json())
+            .then((data) => setTickets(data.tickets || []))
+            .catch(() => setTickets([]))
+            .finally(() => setTicketsLoading(false));
+    }, [ticketsApiUrl]);
+    const addFiles = (fileList) => {
+        const newFiles = Array.from(fileList).map((f) => ({
+            name: f.name,
+            size: f.size,
+        }));
+        setFiles((prev) => [...prev, ...newFiles]);
+    };
+    const handleFileInputChange = (e) => {
+        if (e.target.files?.length)
+            addFiles(e.target.files);
+        e.target.value = "";
+    };
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files?.length)
+            addFiles(e.dataTransfer.files);
+    };
+    const removeFile = (name) => {
+        setFiles((prev) => prev.filter((f) => f.name !== name));
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const isMissing = !objectType.trim() || !subject.trim() || !description.trim();
+        if (isMissing) {
+            setFormMessage({
+                type: "error",
+                text: "Please fill all mandatory fields.",
+            });
+            return;
+        }
+        setSubmitting(true);
+        try {
+            const res = await fetch(ticketsApiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ objectType, subject, description }),
+            });
+            if (!res.ok)
+                throw new Error("Failed to create ticket");
+            const data = await res.json();
+            setTickets((prev) => [data.ticket, ...prev]);
+            setObjectType("");
+            setSubject("");
+            setDescription("");
+            setFiles([]);
+            setFormMessage({
+                type: "success",
+                text: "Ticket submitted successfully.",
+            });
+        }
+        catch {
+            setFormMessage({
+                type: "error",
+                text: "Something went wrong submitting the ticket. Please try again.",
+            });
+        }
+        finally {
+            setSubmitting(false);
+            setTimeout(() => setFormMessage(null), 4000);
+        }
+    };
+    return (jsx("div", { className: `min-h-screen bg-[#cfe0f7] p-4 ${className ?? ""}`, children: jsx("div", { className: "w-full p-4", children: jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [jsxs("div", { className: "rounded border bg-white w-600", style: {
+                            width: "700px",
+                            textAlign: "left",
+                            height: "550px",
+                            color: "black",
+                        }, children: [jsx("div", { className: "border-b bg-slate-50 pt-0", children: jsx("h2", { className: "font-semibold text-slate-800", style: {
+                                        width: "100%",
+                                        textAlign: "center",
+                                        background: "rgb(243, 243, 243)",
+                                        fontWeight: "bold",
+                                        padding: "0.5rem 0",
+                                        lineHeight: "1.5",
+                                    }, children: "Request a Change or Report an Issue" }) }), jsxs("form", { onSubmit: handleSubmit, className: "space-y-4 p-4", children: [jsx("div", { style: { paddingBottom: "20px" }, children: jsxs("div", { children: [jsxs("label", { className: "mb-3 pb-2", children: [jsx("span", { className: "text-red-600", children: "*" }), " Object Type Or Tab Name"] }), jsx("div", { className: "relative", children: jsxs("select", { value: objectType, onChange: (e) => setObjectType(e.target.value), className: "w-full rounded border px-3 py-2 pr-8 appearance-none", children: [jsx("option", { value: "", children: "--None--" }), OBJECT_TYPES.map((item) => (jsx("option", { value: item, children: item }, item)))] }) })] }) }), jsxs("div", { style: { paddingBottom: "20px" }, children: [jsxs("label", { children: [jsx("span", { className: "text-red-600", children: "*" }), " Subject"] }), jsx("input", { value: subject, onChange: (e) => setSubject(e.target.value), className: "w-full rounded border px-3 py-2" })] }), jsxs("div", { children: [jsxs("label", { className: "mb-1", children: [jsx("span", { className: "text-red-600", children: "*" }), " Description"] }), jsx("textarea", { rows: 6, value: description, onChange: (e) => setDescription(e.target.value), className: "w-full border px-3 py-2" })] }), jsxs("div", { className: "border-t pt-4", children: [jsx("p", { children: "Optional: Add documents or screenshots" }), jsxs("div", { onDragOver: (e) => {
+                                                    e.preventDefault();
+                                                    setIsDragging(true);
+                                                }, onDragLeave: () => setIsDragging(false), onDrop: handleDrop, className: `flex flex-wrap items-center gap-3 rounded border px-3 py-2 ${isDragging
+                                                    ? "border-blue-400 bg-blue-50"
+                                                    : "border-slate-300"}`, children: [jsxs("button", { type: "button", onClick: () => fileInputRef.current?.click(), className: "flex items-center gap-2 rounded px-3 py-1.5 text-blue-600 hover:bg-blue-50", children: [jsx(UploadCloud, { size: 14 }), "Upload Files"] }), jsx("span", { className: "text-slate-500", children: "Or drop files" }), jsx("input", { ref: fileInputRef, type: "file", multiple: true, onChange: handleFileInputChange, className: "hidden" })] }), jsx("p", { className: "mt-2 text-sm font-medium text-red-600", children: "Note: You can drop or select several files at once." }), files.length > 0 && (jsx("ul", { className: "mt-2 space-y-1", children: files.map((f) => (jsxs("li", { className: "flex items-center justify-between rounded bg-slate-50 px-3 py-1.5 text-sm text-slate-700", children: [jsxs("span", { className: "flex min-w-0 items-center gap-2", children: [jsx(FileText, { size: 14, className: "shrink-0 text-slate-400" }), jsx("span", { className: "truncate", children: f.name })] }), jsx("button", { type: "button", onClick: () => removeFile(f.name), className: "ml-2 shrink-0 text-slate-400 hover:text-red-500", "aria-label": `Remove ${f.name}`, children: jsx(X, { size: 14 }) })] }, f.name))) }))] }), formMessage && (jsx(Dialog, { style: { width: "28vw", textAlign: "center" }, header: jsx("div", { style: {
+                                                background: "rgb(243, 243, 243)",
+                                                fontWeight: "bold",
+                                            }, children: formMessage.type === "success"
+                                                ? "Success"
+                                                : "Validation Error" }), visible: !!formMessage, onHide: () => setFormMessage(null), children: jsxs("div", { style: { justifyItems: "center" }, children: [jsx("p", { style: {
+                                                        color: formMessage.type === "success"
+                                                            ? "#15803d"
+                                                            : "#dc2626",
+                                                        marginBottom: "1rem",
+                                                    }, children: formMessage.text }), jsx("div", { className: "flex mt-4", children: jsx("div", { style: {
+                                                            display: "flex",
+                                                            gap: "1rem",
+                                                            paddingBottom: "20px",
+                                                        }, children: jsx("button", { type: "button", onClick: () => setFormMessage(null), className: "bg-blue-500 text-white px-4 py-2 rounded-md", children: "OK" }) }) })] }) })), jsx("div", { className: "flex justify-end", style: { justifyContent: "center" }, children: jsx("button", { type: "submit", className: "flex items-center rounded broder bg-blue-600 px-3 py-2 text-white hover:bg-blue-700", disabled: submitting, children: submitting ? "Saving..." : "Save" }) })] })] }), jsx("div", { className: "min-w-0", children: jsxs("div", { className: "rounded bg-white", style: { width: "690px" }, children: [jsx("div", { className: "border-b bg-slate-50 py-1", children: jsxs("h2", { className: "font-semibold text-slate-800", style: {
+                                            width: "100%",
+                                            textAlign: "center",
+                                            background: "rgb(243, 243, 243)",
+                                            fontWeight: "bold",
+                                            padding: "0.5rem 0",
+                                            lineHeight: "1.5",
+                                            color: "black",
+                                        }, children: ["My Open Tickets (", tickets.length, ")"] }) }), jsxs("div", { style: {
+                                        display: "grid",
+                                        gridTemplateColumns: "repeat(2, 1fr)",
+                                        gap: "16px",
+                                        paddingLeft: "20px",
+                                    }, children: [ticketsLoading && (jsx("p", { className: "p-4 text-slate-500", children: "Loading tickets..." })), !ticketsLoading &&
+                                            tickets.map((ticket) => (jsx(TicketCard, { ticket: ticket }, ticket.id)))] })] }) })] }) }) }));
+}
+Card.displayName = "Card";
 
 export { Button, Card };
 //# sourceMappingURL=index.esm.js.map
