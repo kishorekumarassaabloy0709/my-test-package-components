@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { UploadCloud, X, FileText } from "lucide-react";
-import { Dialog } from "primereact/dialog";
 
 const OBJECT_TYPES = [
   "Account",
@@ -312,56 +311,7 @@ export function Card({ ticketsApiUrl = "/api/tickets", className }: CardProps) {
                 )}
               </div>
 
-              {formMessage && (
-                <Dialog
-                  style={{ width: "28vw", textAlign: "center" }}
-                  header={
-                    <div
-                      style={{
-                        background: "rgb(243, 243, 243)",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {formMessage.type === "success"
-                        ? "Success"
-                        : "Validation Error"}
-                    </div>
-                  }
-                  visible={!!formMessage}
-                  onHide={() => setFormMessage(null)}
-                >
-                  <div style={{ justifyItems: "center" }}>
-                    <p
-                      style={{
-                        color:
-                          formMessage.type === "success"
-                            ? "#15803d"
-                            : "#dc2626",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      {formMessage.text}
-                    </p>
-                    <div className="flex mt-4">
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "1rem",
-                          paddingBottom: "20px",
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setFormMessage(null)}
-                          className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                        >
-                          OK
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </Dialog>
-              )}
+             
 
               <div
                 className="flex justify-end"
